@@ -2,7 +2,7 @@
 $message = "";
 
 if (!empty($_POST)) {
-    $link = mysqli_connect("10.30.212.71","grupo7","Pa$$w0rd","Pokewebapp");
+    $link = mysqli_connect("10.30.212.71","grupo7","Pa$$w0rd","pokewebapp");
 
     if ($link == false) {
         $message = "ERROR: Could not connect " . mysqli_connect_error();
