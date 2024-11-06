@@ -3,7 +3,7 @@ $message = "";
 
 // Establecemos la conexión con la base de datos
 if (!empty($_POST)) {
-    $link = mysqli_connect("localhost","root","","Pokewebapp");
+    $link = mysqli_connect("10.30.212.71","root","","Pokewebapp");
     // Revisamos que se haya realizado la conexión
     if ($link == false){
         die("ERROR: Could not connect ".mysqli_connect_error());
