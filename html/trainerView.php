@@ -19,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['user-mail'])) {
     $trainerEmail = $_POST['user-mail'];
 
     // Conectar a la base de datos
-    $link = mysqli_connect("localhost", "root", "", "Pokewebapp");
+    $link = mysqli_connect("10.30.212.71", "grupo7", "", "Pokewebapp");
 
     // Revisar si se ha realizado la conexión
     if ($link == false) {
