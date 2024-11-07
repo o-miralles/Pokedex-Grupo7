@@ -37,7 +37,7 @@ if (!empty($_POST)) {
             while($row = $result->fetch_array()){
                 $id = $row['id'];
             }
-            $stmt = $link->prepare("INSERT INTO Pokedek (id_usuario) VALUES (?)");
+            $stmt = $link->prepare("INSERT INTO pokedek (id_usuario) VALUES (?)");
             $stmt->bind_param("s", $id);
             $stmt->execute();
 
