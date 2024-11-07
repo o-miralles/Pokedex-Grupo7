@@ -1,13 +1,11 @@
 pipeline {
     agent any
-
     environment {
         // Nombre del servidor SonarQube configurado en Jenkins
         SONARQUBE_SERVER = 'SonarQube_Local'
         // Agregar sonar-scanner al PATH
         PATH = "/opt/sonar-scanner/bin:${env.PATH}"
     }
-
     stages {
         stage('Checkout') {
             steps {
@@ -20,7 +18,10 @@ pipeline {
                 // Configurar el entorno de SonarQube
                 withSonarQubeEnv("${SONARQUBE_SERVER}") {
                     // Ejecutar el análisis con SonarScanner
-                    sh "${tool 'SonarQube_JenkinsLocal'}/bin/sonar-scanner -Dsonar.projectKey=pokedex_grupo7 -Dsonar.sources=. -Dsonar.php.version=8.0"
+                    sh "${tool 'SonarQube_JenkinsLocal'}/bin/sonar-scanner 
+                    -Dsonar.projectKey=pokedex_grupo7 
+                    -Dsonar.sources=. 
+                    -Dsonar.php.version=8.0"
                 }
             }
         }
