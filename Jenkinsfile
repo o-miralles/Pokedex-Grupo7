@@ -14,7 +14,9 @@ pipeline {
                 // Usar credenciales SSH para conectarse al servidor web
                 sshagent(['webserver_ssh_credentials_id']) {
                     sh '''
-                        ssh grupo7@10.30.212.71 'cd /var/www/html/Pokedex-Grupo7 && git clone https://github.com/o-miralles/Pokedex-Grupo7 || cd /var/www/html/Pokedex-Grupo7 && git pull)'
+                        # Asegurarse de que el servidor SSH es confiable y no pregunte por la clave
+                        ssh-keyscan -H 10.30.212.71 >> var/jenkins_home/.ssh/known_hosts
+                        ssh grupo7@10.30.212.71 'cd /var/www/html/Pokedex-Grupo7 && git clone https://github.com/o-miralles/Pokedex-Grupo7 || cd /var/www/html/Pokedex-Grupo7 && git pull'
                     '''
                 }
             }
