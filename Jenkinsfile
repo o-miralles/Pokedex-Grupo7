@@ -22,36 +22,37 @@ pipeline {
             }
         }
         stage('ZAP Analysis') {
-    steps {
-        script {
-            withDockerRegistry([credentialsId: '', url: '']) {  // If registry credentials are needed
-                docker.image('owasp/zap2docker-stable').inside('--network host') {
-                    sh '''
-                        # Iniciar ZAP en modo demonio
-                        zap.sh -daemon -host 127.0.0.1 -port 8090 -config api.disablekey=true &
-                        # Esperar a que ZAP esté listo
-                        timeout=120
-                        while ! curl -s http://127.0.0.1:8090; do
-                            sleep 5
-                            timeout=$((timeout - 5))
-                            if [ $timeout -le 0 ]; then
-                                echo "ZAP no se inició a tiempo"
-                                exit 1
-                            fi
-                        done
-                        # Ejecutar el escaneo completo con zap-full-scan.py
-                        zap-full-scan.py -t http://10.30.212.71 -r zap_report.html -I
-                        # Apagar ZAP
-                        zap.sh -cmd -shutdown
-                    '''
+            steps {
+                script {
+                    // Ejecutar ZAP dentro de un contenedor Docker sin usar zap-cli
+                    docker.image('owasp/zap2docker-stable').inside('--network host') {
+                        sh '''
+                            # Iniciar ZAP en modo demonio
+                            zap.sh -daemon -host 127.0.0.1 -port 8090 -config api.disablekey=true &
+                            # Esperar a que ZAP esté listo
+                            timeout=120
+                            while ! curl -s http://127.0.0.1:8090; do
+                                sleep 5
+                                timeout=$((timeout - 5))
+                                if [ $timeout -le 0 ]; then
+                                    echo "ZAP no se inició a tiempo"
+                                    exit 1
+                                fi
+                            done
+                            # Ejecutar el escaneo completo con zap-full-scan.py
+                            zap-full-scan.py -t http://10.30.212.71 -r zap_report.html -I
+                            # Apagar ZAP
+                            zap.sh -cmd -shutdown
+                        '''
+                    }
                 }
+                // Publicar el reporte de ZAP
+                publishHTML(target: [
+                    reportDir: "${env.WORKSPACE}",
+                    reportFiles: 'zap_report.html',
+                    reportName: 'Reporte ZAP'
+                ])
             }
         }
-        // Publicar el reporte de ZAP
-        publishHTML(target: [
-            reportDir: "${env.WORKSPACE}",
-            reportFiles: 'zap_report.html',
-            reportName: 'Reporte ZAP'
-        ])
     }
 }
