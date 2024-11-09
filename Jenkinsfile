@@ -24,31 +24,37 @@ pipeline {
         stage('ZAP Analysis') {
             steps {
                 script {
-                    // Ejecutar ZAP dentro de un contenedor Docker sin usar zap-cli
-                    docker.image('ghcr.io/zaproxy/zaproxy:stable').inside('-v /zap/wrk:/zap/wrk --network bridge') {
-                        sh '''
-                            # Iniciar ZAP en modo demonio
-                            zap.sh -daemon -host 127.0.0.1 -port 8090 -config api.disablekey=true &
-                            # Esperar a que ZAP esté listo
-                            timeout=120
-                            while ! curl -s http://127.0.0.1:8090; do
-                                sleep 5
-                                timeout=$((timeout - 5))
-                                if [ $timeout -le 0 ]; then
-                                    echo "ZAP no se inició a tiempo"
-                                    exit 1
-                                fi
-                            done
-                            # Ejecutar el escaneo completo con zap-full-scan.py
-                            zap-full-scan.py -t http://10.30.212.72/Pokedex-Grupo7/html/ -r zap_report.html -I
-                            # Apagar ZAP
-                            zap.sh -cmd -shutdown
-                        '''
-                    }
+                // Ejecutar ZAP dentro de un contenedor Docker sin usar zap-cli
+                docker.image('ghcr.io/zaproxy/zaproxy:stable').inside('-v /home/grupo7/zap/wrk:/zap/wrk --network host') {
+                    sh '''
+                        # Iniciar ZAP en modo demonio
+                        zap.sh -daemon -host 127.0.0.1 -port 8090 -config api.disablekey=true &
+                    
+                        # Esperar a que ZAP esté listo
+                        timeout=120
+                        while ! curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1:8090; do
+                            sleep 5
+                            timeout=$((timeout - 5))
+                            if [ $timeout -le 0 ]; then
+                                echo "ZAP no se inició a tiempo"
+                                exit 1
+                            fi
+                        done
+                    
+                        # Ejecutar el escaneo completo con zap-full-scan.py
+                        zap-full-scan.py -t http://10.30.212.72/Pokedex-Grupo7/html/ -r /zap/wrk/zap_report.html -I
+                    
+                        # Apagar ZAP
+                        zap.sh -cmd -shutdown
+                    '''
                 }
+            }
+                // Verificar si el reporte existe antes de publicarlo
+                sh 'ls -l /zap/wrk/zap_report.html || echo "ZAP report not found!"'
+        
                 // Publicar el reporte de ZAP
                 publishHTML(target: [
-                    reportDir: "${env.WORKSPACE}",
+                    reportDir: '/zap/wrk',
                     reportFiles: 'zap_report.html',
                     reportName: 'Reporte ZAP'
                 ])
