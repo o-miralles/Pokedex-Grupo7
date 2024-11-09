@@ -28,11 +28,11 @@ pipeline {
                 docker.image('ghcr.io/zaproxy/zaproxy:stable').inside('-v /home/grupo7/zap/wrk:/zap/wrk --network host') {
                     sh '''
                         # Iniciar ZAP en modo demonio
-                        zap.sh -daemon -host 10.30.212.70 -port 8090 -config api.disablekey=true -config api.address=0.0.0.0 &
+                        zap.sh -daemon -host 127.0.0.1 -port 8090 -config api.disablekey=true -config &
                     
                         # Esperar a que ZAP esté listo
                         timeout=120
-                        while ! curl -s -o /dev/null -w "%{http_code}" http://10.30.212.70:8090; do
+                        while ! curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1:8090; do
                             sleep 5
                             timeout=$((timeout - 5))
                             if [ $timeout -le 0 ]; then
