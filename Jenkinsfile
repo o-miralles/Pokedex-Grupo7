@@ -25,7 +25,7 @@ pipeline {
             steps {
                 script {
                     // Ejecutar ZAP dentro de un contenedor Docker sin usar zap-cli
-                    docker.image('ghcr.io/zaproxy/zaproxy:stable').inside('-v /zap/wrk:/zap/wrk --network host') {
+                    docker.image('ghcr.io/zaproxy/zaproxy:stable').inside('-v /zap/wrk:/zap/wrk --network bridge') {
                         sh '''
                             # Iniciar ZAP en modo demonio
                             zap.sh -daemon -host 127.0.0.1 -port 8090 -config api.disablekey=true &
