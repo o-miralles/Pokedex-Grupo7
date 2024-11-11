@@ -29,6 +29,8 @@ pipeline {
                         sh '''
                             # Iniciar ZAP en modo demonio
                             zap.sh -daemon -host 127.0.0.1 -port 8090 -config api.disablekey=true &
+                            container_id=$(docker ps -q -f ancestor=ghcr.io/zaproxy/zaproxy:stable)
+                            docker rename $container_id zap-container
                             # Esperar a que ZAP esté listo
                             timeout=120
                             while ! curl -s http://127.0.0.1:8090; do
