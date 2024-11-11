@@ -28,7 +28,7 @@ pipeline {
                     docker.image('ghcr.io/zaproxy/zaproxy:stable').inside('-p 8090:8090 --network bridge') {
                         sh '''
                             # Iniciar ZAP en modo demonio
-                            zap.sh -daemon -host 10.30.212.70 -port 8090 -config api.disablekey=true -config log.console=true -config log.level=DEBUG &
+                            zap.sh -daemon -host 0.0.0.0 -port 8090 -config api.disablekey=true -config log.console=true -config log.level=DEBUG &
                             # Esperar a que ZAP esté listo
                             timeout=240
                             while ! curl -s http://10.30.212.70:8090; do
