@@ -39,6 +39,14 @@ pipeline {
                                     exit 1
                                 fi
                             done
+                            while ! curl -s curl http://127.0.0.1:8090/JSON/core/view/version/; do
+                                sleep 5
+                                timeout=$((timeout - 5))
+                                if [ $timeout -le 0 ]; then
+                                    echo "La API de ZAP no se inició a tiempo"
+                                    exit 1
+                                fi
+                            done
                             # Ejecutar el escaneo completo con zap-full-scan.py
                             zap-full-scan.py -t http://10.30.212.72/Pokedex-Grupo7/html/ -r zap_report.html -I
 
