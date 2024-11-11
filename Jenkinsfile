@@ -16,7 +16,7 @@ pipeline {
                     sh '''
                         # Asegurarse de que el servidor SSH es confiable y no pregunte por la clave
                         ssh-keyscan -H 10.30.212.72 >> ~/.ssh/known_hosts
-                        ssh grupo7@10.30.212.72 'cd /var/www/html && git clone https://github.com/o-miralles/Pokedex-Grupo7.git || cd /var/www/html/Pokedex-Grupo7 && git pull'
+                        ssh grupo7@10.30.212.72 'cd /var/www/html/  && git clone https://github.com/o-miralles/Pokedex-Grupo7.git || cd /var/www/html/Pokedex-Grupo7 && git pull'
                     '''
                 }
             }
@@ -25,12 +25,10 @@ pipeline {
             steps {
                 script {
                     // Ejecutar ZAP dentro de un contenedor Docker sin usar zap-cli
-                    docker.image('ghcr.io/zaproxy/zaproxy:stable').inside('-v /home/grupo7/zap/wrk:/zap/wrk --network host') {
+                    docker.image('ghcr.io/zaproxy/zaproxy:stable').inside('-v /zap/wrk:/zap/wrk --network bridge') {
                         sh '''
                             # Iniciar ZAP en modo demonio
                             zap.sh -daemon -host 127.0.0.1 -port 8090 -config api.disablekey=true &
-                            container_id=$(docker ps -q -f ancestor=ghcr.io/zaproxy/zaproxy:stable)
-                            docker rename $container_id zap-container
                             # Esperar a que ZAP esté listo
                             timeout=120
                             while ! curl -s http://127.0.0.1:8090; do
@@ -42,7 +40,7 @@ pipeline {
                                 fi
                             done
                             # Ejecutar el escaneo completo con zap-full-scan.py
-                            zap-full-scan.py -t http://10.30.212.72/Pokedex-Grupo7/html/ -r zap_report.html -I
+                            zap-full-scan.py -t http://10.30.212.72/Pokedex-Grupo7/html/  -r zap_report.html -I
                             # Apagar ZAP
                             zap.sh -cmd -shutdown
                         '''
