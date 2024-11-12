@@ -1,14 +1,14 @@
 <?php
 $name = "";
 
-$link = mysqli_connect("10.30.212.71","grupo7","Pa$$w0rd","pokewebapp");
+$link = mysqli_connect('10.30.212.71','grupo7','Pa$$w0rd','pokewebapp');
 
 if ($link == false) {
   $message = "ERROR: Could not connect " . mysqli_connect_error();
 } else {
   $email = $_SESSION["currentEmail"];
 
-  $sql = "SELECT nombre FROM Usuario WHERE correo='$email'";
+  $sql = "SELECT nombre FROM usuario WHERE correo='$email'";
   $result = mysqli_query($link, $sql);
 
   if (mysqli_num_rows($result) > 0) {
@@ -16,7 +16,7 @@ if ($link == false) {
       foreach($row as $value) $name = $value;
     }
 
-    $sql = "SELECT * FROM Usuario WHERE correo != '$email'";
+    $sql = "SELECT * FROM usuario WHERE correo != '$email'";
     $result = mysqli_query($link, $sql);
 
     if (mysqli_num_rows($result) > 0) {
@@ -50,10 +50,10 @@ if ($link == false) {
 
       for ($i = 0; $i < $maxi; $i++) {
         $id_usuario = $usersToUse[$i]["id"];
-        $sql = "SELECT COUNT(p.id) AS 'n' FROM Pokemon p
-                INNER JOIN Pokedek_pokemon pp ON p.id = pp.id_pokemon 
-                INNER JOIN Pokedek pk ON pp.id_pokedek = pk.id
-                INNER JOIN Usuario u ON pk.id_usuario = u.id WHERE u.id ='$id_usuario'";
+        $sql = "SELECT COUNT(p.id) AS 'n' FROM pokemon p
+                INNER JOIN pokedek_pokemon pp ON p.id = pp.id_pokemon 
+                INNER JOIN pokedek pk ON pp.id_pokedek = pk.id
+                INNER JOIN usuario u ON pk.id_usuario = u.id WHERE u.id ='$id_usuario'";
         $result = mysqli_query($link, $sql);
 
         if (mysqli_num_rows($result) > 0) {

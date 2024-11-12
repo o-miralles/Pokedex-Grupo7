@@ -5,7 +5,7 @@ $id_pokemon = "";
 
 $message = "";
 // Establecemos la conexión con la base de datos
-$link = mysqli_connect("10.30.212.71", "grupo7", "Pa$$w0rd", "pokewebapp");
+$link = mysqli_connect('10.30.212.71', 'grupo7', 'Pa$$w0rd', 'pokewebapp');
 
 // Revisamos que se haya realizado la conexión
 if ($link == false) {
@@ -16,14 +16,14 @@ if ($link == false) {
     $userID = $_SESSION["currentId"];
 
     // Verificar si hay pokeballs disponibles
-    $sql = "SELECT pokeballs FROM Usuario WHERE id='$userID'";
+    $sql = "SELECT pokeballs FROM usuario WHERE id='$userID'";
     $result = mysqli_query($link, $sql);
     $row = mysqli_fetch_assoc($result);
     $pokeballs = $row["pokeballs"];
 
     if ($pokeballs > 0) {
         // Obtenemos el id del pokedek del usuario
-        $sql = "SELECT id FROM Pokedek WHERE id_usuario='$userID'";
+        $sql = "SELECT id FROM pokedek WHERE id_usuario='$userID'";
         $result = mysqli_query($link, $sql);
 
         if (mysqli_num_rows($result) > 0) {
@@ -42,13 +42,13 @@ if ($link == false) {
                 $baxp = $_COOKIE["baxp"];
 
                 // Creamos el query de insert para el pokemon
-                $sql = "INSERT INTO Pokemon (img_id,especie,nombre,peso,altura,baxp) VALUES ('$img_id','$especie','$especie','$peso','$altura','$baxp')";
+                $sql = "INSERT INTO pokemon (img_id,especie,nombre,peso,altura,baxp) VALUES ('$img_id','$especie','$especie','$peso','$altura','$baxp')";
                 if (mysqli_query($link, $sql)) {
                     // Obtenemos el id del último pokemon agregado
                     $id_pokemon = mysqli_insert_id($link);
 
                     // Agregamos el pokemon al pokedek
-                    $sql = "INSERT INTO Pokedek_pokemon (id_pokedek,id_pokemon) VALUES ('$id_pokedek','$id_pokemon')";
+                    $sql = "INSERT INTO pokedek_pokemon (id_pokedek,id_pokemon) VALUES ('$id_pokedek','$id_pokemon')";
                     if (mysqli_query($link, $sql)) {
                         $message = "Pokemon added to Pokedek";
                         header('Location: ../html/successInsert.html');
@@ -60,7 +60,7 @@ if ($link == false) {
                 }
             } else {
                 // Restar una pokeball de la tabla usuario y redirigir a failInsert.html
-                $sql = "UPDATE Usuario SET pokeballs = pokeballs - 1 WHERE id='$userID'";
+                $sql = "UPDATE usuario SET pokeballs = pokeballs - 1 WHERE id='$userID'";
                 if (mysqli_query($link, $sql)) {
                     $message = "Pokeball subtracted from user";
                     header('Location: ../html/failInsert.html');

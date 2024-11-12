@@ -19,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['user-mail'])) {
     $trainerEmail = $_POST['user-mail'];
 
     // Conectar a la base de datos
-    $link = mysqli_connect("10.30.212.71", "grupo7", "Pa$$w0rd", "pokewebapp");
+    $link = mysqli_connect('10.30.212.71', 'grupo7', 'Pa$$w0rd', 'pokewebapp');
 
     // Revisar si se ha realizado la conexión
     if ($link == false) {
@@ -27,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['user-mail'])) {
     } else {
         // Obtener el nombre y correo del usuario actual
         $email = $_SESSION["currentEmail"];
-        $sql = "SELECT nombre, correo FROM Usuario WHERE correo='$email'";
+        $sql = "SELECT nombre, correo FROM usuario WHERE correo='$email'";
         $result = mysqli_query($link, $sql);
         if (mysqli_num_rows($result) > 0) {
             while ($row = $result->fetch_assoc()) {
@@ -39,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['user-mail'])) {
         }
 
         // Obtener el nombre y correo del entrenador
-        $sql = "SELECT nombre, correo FROM Usuario WHERE correo='$trainerEmail'";
+        $sql = "SELECT nombre, correo FROM usuario WHERE correo='$trainerEmail'";
         $result = mysqli_query($link, $sql);
         if (mysqli_num_rows($result) > 0) {
             while ($row = $result->fetch_assoc()) {
@@ -50,9 +50,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['user-mail'])) {
             // Obtener los Pokémon del entrenador
             $sql = "SELECT p.id, p.img_id, p.especie, p.nombre, p.peso, p.altura, p.baxp 
                     FROM Pokemon p 
-                    INNER JOIN Pokedek_pokemon pp ON p.id = pp.id_pokemon 
-                    INNER JOIN Pokedek pk ON pp.id_pokedek = pk.id 
-                    INNER JOIN Usuario u ON pk.id_usuario = u.id 
+                    INNER JOIN pokedek_pokemon pp ON p.id = pp.id_pokemon 
+                    INNER JOIN pokedek pk ON pp.id_pokedek = pk.id 
+                    INNER JOIN usuario u ON pk.id_usuario = u.id 
                     WHERE u.correo = '$trainerEmail' 
                     ORDER BY p.id DESC";
             $result = mysqli_query($link, $sql);

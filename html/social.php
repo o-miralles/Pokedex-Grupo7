@@ -18,14 +18,14 @@ $user_mail = "";
 $email = $_SESSION["currentEmail"];
 
 // Conectar a la base de datos
-$link = mysqli_connect("10.30.212.71", "grupo7", "Pa$$w0rd", "pokewebapp");
+$link = mysqli_connect('10.30.212.71', 'grupo7', 'Pa$$w0rd', 'pokewebapp');
 
 // Revisar si se ha realizado la conexión
 if ($link == false) {
     $message = "ERROR: Could not connect " . mysqli_connect_error();
 } else {
     // Obtener el nombre del usuario actual
-    $sql = "SELECT nombre, correo FROM Usuario WHERE correo='$email'";
+    $sql = "SELECT nombre, correo FROM usuario WHERE correo='$email'";
     $result = mysqli_query($link, $sql);
     if (mysqli_num_rows($result) > 0) {
         while ($row = $result->fetch_assoc()) {
@@ -44,9 +44,9 @@ if ($link == false) {
         // Debugging input
         echo "<pre>Input Email: " . htmlspecialchars($searchEmail) . "</pre>";
 
-        $sql2 = "SELECT * FROM Usuario WHERE correo LIKE '%" . $searchEmail . "%'";
+        $sql2 = "SELECT * FROM usuario WHERE correo LIKE '%" . $searchEmail . "%'";
     } else {
-        $sql2 = "SELECT * FROM Usuario WHERE correo != 'admin@stucom.com'";
+        $sql2 = "SELECT * FROM usuario WHERE correo != 'admin@stucom.com'";
     }
 
     // Obtener los usuarios
@@ -62,10 +62,10 @@ if ($link == false) {
 
         foreach ($usersToUse as $user) {
             $id_usuario = $user["id"];
-            $sql3 = "SELECT COUNT(p.id) AS 'n' FROM Pokemon p
-                    INNER JOIN Pokedek_pokemon pp ON p.id = pp.id_pokemon 
-                    INNER JOIN Pokedek pk ON pp.id_pokedek = pk.id
-                    INNER JOIN Usuario u ON pk.id_usuario = u.id WHERE u.id ='$id_usuario'";
+            $sql3 = "SELECT COUNT(p.id) AS 'n' FROM pokemon p
+                    INNER JOIN pokedek_pokemon pp ON p.id = pp.id_pokemon 
+                    INNER JOIN pokedek pk ON pp.id_pokedek = pk.id
+                    INNER JOIN usuario u ON pk.id_usuario = u.id WHERE u.id ='$id_usuario'";
             $result3 = mysqli_query($link, $sql3);
 
             if (mysqli_num_rows($result3) > 0) {

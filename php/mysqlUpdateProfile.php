@@ -2,7 +2,7 @@
 $id_pokedek="";
 require(__DIR__.'/mysqlProfile.php');
 //establecemos la conexión con la base de datos
-$link = mysqli_connect("10.30.212.71","grupo7","Pa$$w0rd","pokewebapp");
+$link = mysqli_connect('10.30.212.71','grupo7','Pa$$w0rd','pokewebapp');
 //revisamos que se haya realizado la conexión
 if($link == false){
 	$message = "ERROR: Could not connect ".mysqli_connect_error();
@@ -11,7 +11,7 @@ if($link == false){
 	$email = $_COOKIE["currentEmail"];
 	//lo primero que necesitamos es el id del pokedek
 	$sql = "SELECT p.id FROM Pokedek p
-INNER JOIN Usuario u ON p.id_usuario=u.id
+INNER JOIN usuario u ON p.id_usuario=u.id
 WHERE u.correo = '$email'";
 	//obtenemos el resultado del query
 	$result = mysqli_query($link, $sql);

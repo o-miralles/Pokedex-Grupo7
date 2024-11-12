@@ -2,7 +2,7 @@
 $message = "";
 
 if (!empty($_POST)) {
-    $link = mysqli_connect("10.30.212.71","grupo7","Pa$$w0rd","pokewebapp");
+    $link = mysqli_connect('10.30.212.71','grupo7','Pa$$w0rd','pokewebapp');
 
     if ($link == false) {
         $message = "ERROR: Could not connect " . mysqli_connect_error();
@@ -10,7 +10,7 @@ if (!empty($_POST)) {
         $email = mysqli_real_escape_string($link, $_POST["email"]);
         $pwd = $_POST["pwd"];
 
-        $stmt = $link->prepare("SELECT id, correo, contrasena FROM Usuario WHERE correo=?");
+        $stmt = $link->prepare("SELECT id, correo, contrasena FROM usuario WHERE correo=?");
         $stmt->bind_param("s", $email);
         $stmt->execute();
         $result = $stmt->get_result();
