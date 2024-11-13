@@ -40,7 +40,7 @@ pipeline {
                                 fi
                             done
                             # Ejecutar el escaneo completo con zap-full-scan.py
-                            zap-full-scan.py -t http://10.30.212.72/Pokedex-Grupo7/html/  -r zap_report.html -I
+                            zap-full-scan.py -t http://10.30.212.72  -r zap_report.html -I
                             # Apagar ZAP
                             zap.sh -cmd -shutdown
                         '''
