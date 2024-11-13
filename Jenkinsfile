@@ -39,7 +39,7 @@ pipeline {
                                     exit 1
                                 fi
                             done
-                            curl http://10.30.212.72
+                            # curl http://10.30.212.72
                             # Ejecutar el escaneo completo con zap-full-scan.py
                             zap-baseline.py -t http://10.30.212.72  -r zap_report.html -j auto -I
                             # zap-full-scan.py -t http://10.30.212.72  -r zap_report.html -I
