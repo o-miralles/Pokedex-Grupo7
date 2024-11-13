@@ -39,10 +39,12 @@ pipeline {
                                     exit 1
                                 fi
                             done
+                            test_zap.py
                             # Ejecutar el escaneo completo con zap-full-scan.py
-                            zap-baseline.py -t http://10.30.212.72  -r zap_report.html -I
+                            # zap-baseline.py -t http://10.30.212.72  -r zap_report.html -I
+                            zap-full-scan.py -t http://10.30.212.72  -r zap_report.html -I
                             # Apagar ZAP
-                            # zap.sh -cmd -shutdown
+                            zap.sh -cmd -shutdown
                         '''
                     }
                 }
