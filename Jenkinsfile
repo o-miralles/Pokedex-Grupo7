@@ -25,7 +25,7 @@ pipeline {
             steps {
                 script {
                     // Ejecutar ZAP dentro de un contenedor Docker sin usar zap-cli
-                    docker.image('ghcr.io/zaproxy/zaproxy:stable').inside('-v /zap/wrk:/zap/wrk --network bridge') {
+                    docker.image('ghcr.io/zaproxy/zaproxy:stable').inside('-v -v $(pwd):/zap/wrk/:rw --network bridge') {
                         sh '''
                             # Iniciar ZAP en modo demonio
                             zap.sh -daemon -host 127.0.0.1 -port 8090 -config api.disablekey=true &
@@ -40,7 +40,7 @@ pipeline {
                                 fi
                             done
                             # Ejecutar el escaneo completo con zap-full-scan.py
-                            zap-baseline.py -t http://10.30.212.72  -r zap_report.html -I
+                            zap-baseline.py -t http://10.30.212.72  -r zap_report.html -j auto -I
                             # zap-full-scan.py -t http://10.30.212.72  -r zap_report.html -I
                             # Apagar ZAP
                             zap.sh -cmd -shutdown
