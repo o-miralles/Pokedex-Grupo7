@@ -4,7 +4,7 @@
     } else {
         $uri = 'http://';
     }
-    $uri =$_SERVER['HTTP_HOST'];
+    $uri .=$_SERVER['HTTP_HOST'];
     header('Location: '.$uri.'/html/index.html');
     exit;
 ?>
