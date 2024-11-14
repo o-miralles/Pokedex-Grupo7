@@ -33,7 +33,7 @@ pipeline {
                     // Run OWASP ZAP container without mounting volumes and without '--rm'
                     sh '''
                     docker run --user root --name zap_scan -v zap_volume:/zap/wrk/ -t ghcr.io/zaproxy/zaproxy:stable \
-                    zap-baseline.py -t https://stucom.com \
+                    zap-baseline.py -t http://10.30.212.72 \
                     -r reporte_zap.html -I
                     '''
 
