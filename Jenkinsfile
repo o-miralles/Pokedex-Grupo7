@@ -22,38 +22,36 @@ pipeline {
                 }
             }
         }
-        stage('ZAP Analysis') {
+        stage('DAST con OWASP ZAP') {
             steps {
                 script {
-                    // Ejecutar ZAP dentro de un contenedor Docker sin usar zap-cli
-                    docker.image('zaproxy/zap-stable').inside('-v /zap/wrk:/zap/wrk --network bridge') {
-                        sh '''
-                            # Iniciar ZAP en modo demonio
-                            zap.sh -daemon -host 0.0.0.0 -port 8090 -config api.disablekey=true &
-                            # Esperar a que ZAP esté listo
-                            timeout=120
-                            while ! curl -s http://127.0.0.1:8090; do
-                                sleep 5
-                                timeout=$((timeout - 5))
-                                if [ $timeout -le 0 ]; then
-                                    echo "ZAP no se inició a tiempo"
-                                    exit 1
-                                fi
-                            done
-                            # Ejecutar el escaneo completo con zap-full-scan.py
-                            zap-baseline.py -t http://10.30.212.72  -r zap_report.html --autooff -I
-                            # zap-full-scan.py -t http://10.30.212.72  -r zap_report.html -I
-                            # Apagar ZAP
-                            zap.sh -cmd -shutdown
-                        '''
-                    }
+                    // Remove any existing container named 'zap_scan'
+                    sh '''
+                    docker rm -f zap_scan || true
+                    '''
+
+                    // Run OWASP ZAP container without mounting volumes and without '--rm'
+                    sh '''
+                    docker run --user root --name zap_scan -v zap_volume:/zap/wrk/ -t ghcr.io/zaproxy/zaproxy:stable \
+                    zap-baseline.py -t https://stucom.com \
+                    -r reporte_zap.html -I
+                    '''
+
+                    // Copy the report directly from the 'zap_scan' container to the Jenkins workspace
+                    sh '''
+                    docker cp zap_scan:/zap/wrk/reporte_zap.html ./reporte_zap.html
+                    '''
+
+                    // Remove the 'zap_scan' container
+                    sh '''
+                    docker rm zap_scan
+                    '''
                 }
-                // Publicar el reporte de ZAP
-                publishHTML(target: [
-                    reportDir: "${env.WORKSPACE}",
-                    reportFiles: 'zap_report.html',
-                    reportName: 'Reporte ZAP'
-                ])
+            }
+            post {
+                always {
+                    archiveArtifacts artifacts: 'reporte_zap.html', fingerprint: true
+                }
             }
         }
     }
