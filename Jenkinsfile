@@ -21,7 +21,7 @@ pipeline {
                 // Configurar el entorno de SonarQube
                 withSonarQubeEnv("${SONARQUBE_SERVER}") {
                     // Ejecutar el análisis con SonarScanner
-                    sh "${tool 'SonarQube_JenkinsLocal'}/bin/sonar-scanner -Dsonar.projectName=Pokedex_Grupo7 -Dsonar.projectKey=pokedex_grupo7 -Dsonar.sources=. -Dsonar.php.version=8.0"
+                    sh "${tool 'SonarQube_JenkinsLocal'}/bin/sonar-scanner -Dsonar.projectKey=pokedex_grupo7 -Dsonar.sources=. -Dsonar.php.version=8.0"
                 }
             }
         }
