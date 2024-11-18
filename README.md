@@ -9,3 +9,6 @@ The Jenkins pipeline is responsible for building the application, run the SonarQ
 The SonarQube analysis provides a report about the code quality, security and bugs. The OWASP ZAP analysis provides a report about the web application security vulnerabilities.
 
 The application is also integrated with GitHub, so every 5 minutes the Jenkins pipeline is triggered and the application is rebuilt and redeployed.
+
+
+When someone clones the repository they will need to do a "cp .env.example .env" and then put the data for the database connection
