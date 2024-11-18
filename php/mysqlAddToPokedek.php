@@ -34,7 +34,7 @@ if ($link == false) {
             }
 
             // Verificación aleatoria del 33%
-            $randomNumber = rand(1, 2);
+            $randomNumber = random_int(1, 2);
             if ($randomNumber == 1) {
                 // Insertar el pokemon normalmente
                 $img_id = $_COOKIE["img_id"];

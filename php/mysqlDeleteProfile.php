@@ -32,7 +32,7 @@ if($link == false){
         $sql = "DELETE FROM pokedek_pokemon WHERE id_pokedek = '$id_pokedek' AND id_pokemon = '$pokemon_id'";
         if(mysqli_query($link, $sql)){
             // Agregar pokeballs de forma aleatoria (1 a 3)
-            $pokeballsToAdd = rand(1, 3);
+            $pokeballsToAdd = random_int(1, 3);
             $sql = "UPDATE usuario SET pokeballs = pokeballs + $pokeballsToAdd WHERE correo = '$email'";
             if(mysqli_query($link, $sql)){
                 header('Location: ../html/profile.php');
