@@ -5,7 +5,9 @@ $id_pokemon = "";
 
 $message = "";
 // Establecemos la conexión con la base de datos
-$link = mysqli_connect('10.30.212.71', 'grupo7', 'Pa$$w0rd', 'pokewebapp');
+require_once __DIR__.'/../php/configdb.php';
+
+$link = mysqli_connect($SERVER,$USERNAME,$PASSWORD,$DATABASE);
 
 // Revisamos que se haya realizado la conexión
 if ($link == false) {

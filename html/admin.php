@@ -6,7 +6,9 @@ if ($_SESSION["currentEmail"] !== "admin@stucom.com") {
   exit();
 }
 
-$link = mysqli_connect('10.30.212.71', 'grupo7', 'Pa$$w0rd', 'pokewebapp');
+require_once __DIR__.'/../php/configdb.php';
+
+$link = mysqli_connect($SERVER,$USERNAME,$PASSWORD,$DATABASE);
 
 if (isset($_POST['email'])) {
   $email = $_POST['email'];

@@ -1,7 +1,9 @@
 <?php
 $name = "";
 
-$link = mysqli_connect('10.30.212.71','grupo7','Pa$$w0rd','pokewebapp');
+require_once __DIR__.'/../php/configdb.php';
+
+$link = mysqli_connect($SERVER,$USERNAME,$PASSWORD,$DATABASE);
 
 if ($link == false) {
   $message = "ERROR: Could not connect " . mysqli_connect_error();
