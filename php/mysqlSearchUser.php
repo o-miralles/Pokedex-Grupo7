@@ -15,10 +15,12 @@ if($link == false){
     if(isset($_POST["user-mail"])){
     	
     	$user_mail = $_POST["user-mail"];
-    	$sql = "SELECT * FROM usuario WHERE correo = '$user_mail'";
+    	$sql = "SELECT * FROM Usuario WHERE correo = '$user_mail'";
     	$result = mysqli_query($link, $sql);
     	if (mysqli_num_rows($result) > 0){
-            setcookie("user_mail", $user_mail, time() + (86400 * 1), "/");
+			
+            setcookie("user_mail", $user_mail, time() + (21600 * 1), "/", "", true, true);
+			
     		header('Location: ../html/trainerView.php');
     	}	else{
     	$message = "Could not find user";

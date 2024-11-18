@@ -34,12 +34,12 @@ if ($link == false) {
       $maxi = sizeof($users);
 
       for ($i = 0; $i < $maxi; $i++) {
-        $random = rand(0, sizeof($users) - 1);
+        $random = random_int(0, sizeof($users) - 1);
 
         for ($j = 0; $j < sizeof($used); $j++) {
           if ($random == $used[$j]) {
             while ($random == $used[$j]) {
-              $random = rand(0, sizeof($users) - 1);
+              $random = random_int(0, sizeof($users) - 1);
             }
           } else {
             break;
