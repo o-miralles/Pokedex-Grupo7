@@ -1,4 +1,3 @@
-
 pipeline {
     agent any
 
@@ -9,7 +8,32 @@ pipeline {
         PATH = "/opt/sonar-scanner/bin:${env.PATH}"
     }
 
-    stage('Deploy to Web Server') {
+    stages {
+        stage('Checkout') {
+            steps {
+                // Clonar el código fuente desde el repositorio
+                checkout scm
+            }
+        }
+        stage('SonarQube Analysis') {
+            steps {
+                // Configurar el entorno de SonarQube
+                withSonarQubeEnv("${SONARQUBE_SERVER}") {
+                    // Ejecutar el análisis con SonarScanner
+                    sh "${tool 'SonarQube_JenkinsLocal'}/bin/sonar-scanner -Dsonar.projectName=Pokedex_Grupo7 -Dsonar.projectKey=pokedex_grupo7 -Dsonar.sources=. -Dsonar.php.version=8.0"
+                }
+            }
+        }
+        stage('Quality Gate') {
+            steps {
+                // Esperar el resultado del Quality Gate
+                timeout(time: 1, unit: 'HOURS') {
+                    waitForQualityGate abortPipeline: true
+                }
+            }
+        }
+
+         stage('Deploy to Web Server') {
             steps {
                 // Usar credenciales SSH para conectarse al servidor web
                 sshagent(['webserver_ssh_credentials_id']) {
