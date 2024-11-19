@@ -6,9 +6,9 @@ if (!empty($_POST)) {
 
     $link = mysqli_connect($SERVER,$USERNAME,$PASSWORD,$DATABASE);
 
-    if ($link == false) {
+    if (!$link) {
         $message = "ERROR: Could not connect " . mysqli_connect_error();
-    } else {
+    }else {
         $email = mysqli_real_escape_string($link, $_POST["email"]);
         $pwd = $_POST["pwd"];
 
@@ -40,4 +40,3 @@ if (!empty($_POST)) {
         mysqli_close($link);
     }
 }
-?>

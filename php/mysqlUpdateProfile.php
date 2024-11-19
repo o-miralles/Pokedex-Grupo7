@@ -1,13 +1,13 @@
 <?php
 $id_pokedek="";
-require(__DIR__.'/mysqlProfile.php');
+require_once(__DIR__.'/mysqlProfile.php');
 //establecemos la conexión con la base de datos
 require_once __DIR__.'/../php/configdb.php';
 
 $link = mysqli_connect($SERVER,$USERNAME,$PASSWORD,$DATABASE);
 //revisamos que se haya realizado la conexión
-if($link == false){
-	$message = "ERROR: Could not connect ".mysqli_connect_error();
+if (mysqli_connect_errno()) {
+  $message = "ERROR: Could not connect " . mysqli_connect_error();
 }else{
 	//obtenemos los datos enviados por el post
 	$email = $_COOKIE["currentEmail"];
@@ -34,8 +34,6 @@ WHERE u.correo = '$email'";
     {
       foreach($row as $value) $id_pokemon = $value;
     }
-    //ya que tenemos el id del pokedek,y id_pokemon cambiaremos
-    //el pokemon seleccionado dentro de dicho pokedek
     $poke_name = $_POST["poke_name"];
     if($poke_name!=""){
     $sql = "UPDATE Pokemon SET nombre  = '$poke_name'  WHERE id = '$id_pokemon'";
@@ -63,4 +61,3 @@ WHERE u.correo = '$email'";
 	mysqli_close($link);
 	}
 }
-?>

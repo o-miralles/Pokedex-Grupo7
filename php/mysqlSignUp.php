@@ -7,9 +7,9 @@ if (!empty($_POST)) {
 
     $link = mysqli_connect($SERVER,$USERNAME,$PASSWORD,$DATABASE);
     // Revisamos que se haya realizado la conexión
-    if ($link == false){
-        die("ERROR: Could not connect ".mysqli_connect_error());
-    } else {
+    if (!$link) {
+        die("ERROR: Could not connect " . mysqli_connect_error());
+    }else {
         // Obtenemos los datos enviados por el post
         $email = mysqli_real_escape_string($link, $_POST["email"]);
         $name = $_POST["name"];
@@ -50,4 +50,3 @@ if (!empty($_POST)) {
         mysqli_close($link);
     }
 }
-?>
