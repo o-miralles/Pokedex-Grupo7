@@ -1,6 +1,6 @@
 <?php
 $id_pokedek="";
-require_once(__DIR__.'/mysqlProfile.php');
+require_once __DIR__.'/mysqlProfile.php';
 //establecemos la conexión con la base de datos
 require_once __DIR__.'/../php/configdb.php';
 
