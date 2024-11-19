@@ -1,4 +1,13 @@
 <?php
+// mysqlProfile.php
+namespace MyNamespace;
+
+class MySQLProfile {
+    public function connect() {
+        // Código para la conexión a la base de datos
+    }
+}
+
 $name = "";
 $pokeballs  = 20;
 //establecemos la conexión con la base de datos

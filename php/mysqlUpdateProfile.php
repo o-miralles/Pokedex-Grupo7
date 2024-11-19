@@ -1,6 +1,10 @@
 <?php
-$id_pokedek="";
-require_once __DIR__.'/mysqlProfile.php';
+// Archivo principal
+use MyNamespace\MySQLProfile;
+
+$id_pokedek = "";
+$profile = new MySQLProfile(); // Creas una instancia de la clase MySQLProfile
+
 //establecemos la conexión con la base de datos
 require_once __DIR__.'/../php/configdb.php';
 
